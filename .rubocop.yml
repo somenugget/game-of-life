@@ -1,0 +1,13 @@
+Style/Documentation:
+  Enabled: false
+
+Style/FrozenStringLiteralComment:
+  Enabled: false
+
+Layout/LineLength:
+  Max: 120
+
+Naming/MethodParameterName:
+  AllowedNames:
+    - x
+    - y
