@@ -11,3 +11,7 @@ Naming/MethodParameterName:
   AllowedNames:
     - x
     - y
+
+Metrics/BlockLength:
+  Exclude:
+    - 'spec/**/*'
