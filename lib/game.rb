@@ -48,7 +48,7 @@ class Game
 
       yield
 
-      sleep 0.1
+      sleep 0.5
     rescue Interrupt
       exit 0
     end

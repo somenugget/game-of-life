@@ -35,14 +35,7 @@ class Grid
     log_grid_state!
 
     grid_cells.each do |grid_cell|
-      cell = grid_cell[:cell]
-      alive_neighbours_count = neighbours(grid_cell[:x], grid_cell[:y]).select(&:alive?).count
-
-      if cell.alive?
-        cell.will_be_alive!(false) unless (2..3).include? alive_neighbours_count
-      elsif alive_neighbours_count == 3
-        cell.will_be_alive!
-      end
+      grid_cell[:cell].will_be_alive_with_neighbours! neighbours(grid_cell[:x], grid_cell[:y])
     end
 
     apply_changes!
@@ -78,6 +71,14 @@ class Grid
     @grid_state_log.include? to_s
   end
 
+  def to_s
+    @grid
+      .map { |line| line.map(&:to_s).join(' ') }
+      .join("\n")
+  end
+
+  private
+
   def grid_cells
     cells = []
 
@@ -89,14 +90,6 @@ class Grid
 
     cells
   end
-
-  def to_s
-    @grid
-      .map { |line| line.map(&:to_s).join(' ') }
-      .join("\n")
-  end
-
-  private
 
   def log_grid_state!
     @grid_state_log.push to_s

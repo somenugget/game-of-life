@@ -17,8 +17,14 @@ class Cell
     !alive?
   end
 
-  def will_be_alive!(value = true)
-    @will_be_alive = value
+  def will_be_alive_with_neighbours!(neighbours)
+    alive_neighbours_count = neighbours.select(&:alive?).count
+
+    if alive?
+      @will_be_alive = false unless (2..3).include? alive_neighbours_count
+    elsif alive_neighbours_count == 3
+      @will_be_alive = true
+    end
   end
 
   def apply_changes!
