@@ -1,3 +1,4 @@
+require 'matrix'
 require 'dry-initializer'
 require_relative 'cell'
 
@@ -19,16 +20,8 @@ class Grid
     super
 
     @grid_state_log = []
-
-    @grid = Array
-            .new(width * height)
-            .map! { Cell.new }
-            .each_slice(width)
-            .to_a
-
-    @cells_alive.each do |coordinates|
-      @grid.dig(*coordinates).live!
-    end
+    @grid = Matrix.build(height, width) { Cell.new }
+    @cells_alive.each { |coordinates| @grid[*coordinates].live! }
   end
 
   def evolve
@@ -52,10 +45,10 @@ class Grid
       neighbour_x = x + x_diff
       neighbour_y = y + y_diff
 
-      @grid.dig(
-        neighbour_x < width ? neighbour_x : 0,
-        neighbour_y < width ? neighbour_y : 0
-      )
+      @grid[
+        neighbour_y < width ? neighbour_y : 0,
+        neighbour_x < width ? neighbour_x : 0
+      ]
     end
   end
 
@@ -73,6 +66,7 @@ class Grid
 
   def to_s
     @grid
+      .to_a
       .map { |line| line.map(&:to_s).join(' ') }
       .join("\n")
   end
@@ -82,10 +76,8 @@ class Grid
   def grid_cells
     cells = []
 
-    @grid.each_with_index do |rows, x|
-      rows.each_with_index do |cell, y|
-        cells.push(x: x, y: y, cell: cell)
-      end
+    @grid.each_with_index do |cell, y, x|
+      cells.push(x: x, y: y, cell: cell)
     end
 
     cells
