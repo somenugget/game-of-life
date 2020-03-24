@@ -34,24 +34,6 @@ class Grid
     apply_changes!
   end
 
-  def apply_changes!
-    grid_cells.each do |grid_cell|
-      grid_cell[:cell].apply_changes!
-    end
-  end
-
-  def neighbours(x, y)
-    RELATIVE_NEIGHBOUR_COORDINATES.values.map do |x_diff, y_diff|
-      neighbour_x = x + x_diff
-      neighbour_y = y + y_diff
-
-      @grid[
-        neighbour_y < width ? neighbour_y : 0,
-        neighbour_x < width ? neighbour_x : 0
-      ]
-    end
-  end
-
   def lifeless?
     grid_cells.all? { |grid_cell| grid_cell[:cell].dead? }
   end
@@ -72,6 +54,24 @@ class Grid
   end
 
   private
+
+  def apply_changes!
+    grid_cells.each do |grid_cell|
+      grid_cell[:cell].apply_changes!
+    end
+  end
+
+  def neighbours(x, y)
+    RELATIVE_NEIGHBOUR_COORDINATES.values.map do |x_diff, y_diff|
+      neighbour_x = x + x_diff
+      neighbour_y = y + y_diff
+
+      @grid[
+        neighbour_y < width ? neighbour_y : 0,
+        neighbour_x < width ? neighbour_x : 0
+      ]
+    end
+  end
 
   def grid_cells
     cells = []

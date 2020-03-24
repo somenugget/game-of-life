@@ -13,20 +13,31 @@ class Game
   end
 
   def call
-    at_exit { puts 'bye' }
-
     game_loop do
       puts grid
 
-      break if grid.lifeless?
-      break if grid.unchanged?
-      break if grid.in_cycle?
+      break if grid.lifeless? || grid.unchanged? || grid.in_cycle?
 
       grid.evolve
-
     end
 
-    puts ''
+    finish_game
+  end
+
+  def game_loop
+    loop do
+      system('clear')
+
+      yield
+
+      sleep 0.5
+    rescue Interrupt
+      exit 0
+    end
+  end
+
+  def finish_game
+    puts
     puts game_end_reason
   end
 
@@ -39,18 +50,6 @@ class Game
       'Life cycled'
     else
       'Unknown'
-    end
-  end
-
-  def game_loop
-    loop do
-      system('clear')
-
-      yield
-
-      sleep 0.5
-    rescue Interrupt
-      exit 0
     end
   end
 end
